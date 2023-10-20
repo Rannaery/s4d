@@ -47,5 +47,4 @@ result_i = abs( -5 ).
 Write: / |abs(-5) = { result_i }|.
 
 result_p = round( val = '873.8544' dec = 2 ).
-DATA( result_x )= round( val = '873.8544' dec = 2 ).
 WRITE: / |result_p = round( val = '873.8544' dec = 2 ) = { result_p }|.

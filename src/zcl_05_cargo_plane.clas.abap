@@ -5,31 +5,30 @@ CLASS zcl_05_cargo_plane DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    DATA cargo_in_tons TYPE i.
+    DATA cargo_in_tons TYPE i READ-ONLY.
+
     METHODS constructor
-      IMPORTING name          TYPE string
-                airplane_type TYPE string
+      IMPORTING !name         TYPE string
+                plane_type    TYPE string
                 cargo_in_tons TYPE i
       RAISING   zcx_abap_initial_parameter.
 
     METHODS to_string REDEFINITION.
 
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
 
 
-
 CLASS zcl_05_cargo_plane IMPLEMENTATION.
   METHOD constructor.
+    super->constructor( name = name plane_type = plane_type ).
 
-    super->constructor( name = name airplane_type = airplane_type ).
     me->cargo_in_tons = cargo_in_tons.
-
   ENDMETHOD.
 
   METHOD to_string.
-    string = |{ name } { airplane_type } { cargo_in_tons }|.
+    string = |{ plane_type } ({ cargo_in_tons }t), { name }|.
   ENDMETHOD.
-
 ENDCLASS.

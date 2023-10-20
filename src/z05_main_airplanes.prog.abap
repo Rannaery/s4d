@@ -1,36 +1,66 @@
 *&---------------------------------------------------------------------*
-*& Report z05_main_airplanes
+*& Report z00_main_airplanes
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT z05_main_airplanes.
+REPORT z00_main_airplanes.
 
-DATA plane TYPE REF TO zcl_05_airplane.
-DATA planes TYPE TABLE OF REF TO zcl_05_airplane.
+DATA airplane      TYPE REF TO zcl_05_airplane.
+DATA carrier       TYPE REF TO zcl_05__carrier.
+DATA partners      TYPE TABLE OF REF TO zif_05_partner.
+DATA rental1       TYPE REF TO zcl_05__rental.
+DATA rental2       TYPE REF TO zcl_05__rental.
+DATA vehicle       TYPE REF TO zcl_05_vehicle.
+DATA vehicles      TYPE TABLE OF REF TO zcl_05_vehicle.
+DATA car           TYPE REF TO zcl_05_car.
+DATA truck         TYPE REF TO zcl_05_truck.
+DATA travel_agency TYPE REF TO zcl_05_travel_agency.
+
+travel_agency = NEW #( 'TUI' ).
+rental1 = NEW #( 'Sixt' ).
+rental2 = NEW #( 'Hertz' ).
+carrier = NEW #( 'Lufthansa' ).
+
+travel_agency->add_partner( rental1 ).
+travel_agency->add_partner( rental2 ).
+travel_agency->add_partner( carrier ).
+
 TRY.
-    plane = NEW zcl_05_passenger_plane( name = 'Airbus' airplane_type = 'A320' number_of_seats = 400 ).
-    APPEND plane TO planes.
-
-  CATCH zcx_abap_initial_parameter INTO DATA(e).
-    WRITE e->get_text(  ).
+    vehicle = NEW zcl_05_car( make = 'VW' model = 'Up' number_of_seats = 4 ). " vehicle = new Car("VW", "Up", 4);
+    rental1->add_vehicle( vehicle ).
+  CATCH zcx_05_initial_parameter INTO DATA(e).
+    WRITE e->get_text( ).
 ENDTRY.
 
 TRY.
-    plane = NEW zcl_05_cargo_plane( name = 'Mitsubishi' airplane_type = 'A6M' cargo_in_tons = 300 ).
-    APPEND plane TO planes.
-  CATCH zcx_abap_initial_parameter INTO e.
-    WRITE e->get_text(  ).
+    vehicle = NEW zcl_05_truck( make = 'MAN' model = 'TGX' cargo_in_tons = 40 ). " Upcast
+    rental1->add_vehicle( vehicle ).
+  CATCH zcx_05_initial_parameter INTO e.
+    WRITE e->get_text( ).
 ENDTRY.
 
 TRY.
-    plane = NEW zcl_05_airplane( name = 'Avro' airplane_type = 'Anson' ).
-    APPEND plane TO planes.
-  CATCH zcx_abap_initial_parameter INTO e.
-    WRITE e->get_text(  ).
+    vehicle = NEW zcl_05_car( make = 'Porsche' model = '911' number_of_seats = 2 ).
+    rental2->add_vehicle( vehicle ).
+  CATCH zcx_05_initial_parameter INTO e.
+    WRITE e->get_text( ).
 ENDTRY.
 
-LOOP AT planes INTO plane.
-  WRITE / plane->to_string(  ).
+TRY.
+    airplane = NEW zcl_05_passenger_plane( name = 'Flugzeug 1' plane_type = 'Boeing 747' number_of_seats = 400 ).
+    carrier->add_airplane( airplane ).
+    airplane = NEW zcl_05_cargo_plane( name = 'Mein Beluga' plane_type = 'Airbus Beluga XL' cargo_in_tons = 53 ).
+    carrier->add_airplane( airplane ).
+    airplane = NEW zcl_05_passenger_plane( name = 'Flugzeug 3' plane_type = 'Airbus A340' number_of_seats = 600 ).
+    carrier->add_airplane( airplane ).
+    airplane = NEW zcl_05_cargo_plane( name = 'Kleiner Beluga' plane_type = 'Airbus Beluga' cargo_in_tons = 38 ).
+    carrier->add_airplane( airplane ).
+  CATCH zcx_abap_initial_parameter INTO DATA(e2).
+    WRITE e2->get_text( ).
+ENDTRY.
+
+" Ausgabe
+SPLIT travel_agency->to_string( ) AT ';' INTO TABLE DATA(tokens).
+LOOP AT tokens INTO DATA(token).
+  WRITE / token.
 ENDLOOP.
-
-WRITE / zcl_05_airplane=>number_of_airplanes.

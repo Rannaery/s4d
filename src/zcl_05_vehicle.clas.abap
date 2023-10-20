@@ -1,43 +1,55 @@
 CLASS zcl_05_vehicle DEFINITION
   PUBLIC
+  ABSTRACT
   CREATE PUBLIC .
 
   PUBLIC SECTION.
     DATA make TYPE string READ-ONLY.
     DATA model TYPE string READ-ONLY.
+
     CLASS-DATA number_of_vehicles TYPE i READ-ONLY.
+
     METHODS constructor
       IMPORTING
         make  TYPE string
         model TYPE string
-       raising zcx_05_initial_parameter.
-    METHODS to_string RETURNING VALUE(string) TYPE string.
+      RAISING
+        zcx_05_initial_parameter. "public Vehicle(String make, String model) throws InitialParameterException
+
+    METHODS to_string ABSTRACT
+      RETURNING VALUE(string) TYPE string.
+
   PROTECTED SECTION.
-
   PRIVATE SECTION.
-
-
 ENDCLASS.
 
-
-
 CLASS zcl_05_vehicle IMPLEMENTATION.
+
   METHOD constructor.
+    "if (make.equals("")) {
+    "  throw new InitialParameterException(make);
+    "}
+    "if (model.equals("")) {
+    "  throw new InitialParameterException(model);
+    "}
+    "this.make = make;
+    "this.model = model;
+    "numberOfVehicles++;
+    IF make IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_05_initial_parameter
+        EXPORTING
+          parameter = 'MAKE'.
+    ENDIF.
 
-  if make is INITIAL.
- raise EXCEPTION type zcx_05_initial_parameter exporting parameter = 'MAKE' .
-    endif.
+    IF model IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_05_initial_parameter
+        EXPORTING
+          parameter = 'MODEL'.
+    ENDIF.
 
-    if model is initial.
-     raise EXCEPTION type zcx_05_initial_parameter exporting parameter = 'MODEL' .
-    endif.
-        me->make = make.
+    me->make = make.
     me->model = model.
     number_of_vehicles += 1.
-  ENDMETHOD.
-
-  METHOD to_string.
-    string = |Vehicle: { make } { model }|.
   ENDMETHOD.
 
 ENDCLASS.

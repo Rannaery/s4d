@@ -14,5 +14,3 @@ write text3.
 
 text3 = |{ text } { text2 }|.
 write / text3.
-
-write / |Länge von Text3: { strlen( text3 ) }|.

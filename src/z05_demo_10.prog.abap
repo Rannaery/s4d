@@ -17,5 +17,3 @@ connection-carrier_id = 'LH'.
 connection-connection_id = '0400'.
 connection-departure_city = 'Frankfurt'.
 connection-arrival_city = 'NEW YORK'.
-
-Write: connection-carrier_id, connection-connection_id.

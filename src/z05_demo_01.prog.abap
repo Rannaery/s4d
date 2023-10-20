@@ -5,8 +5,8 @@
 *&---------------------------------------------------------------------*
 REPORT z05_demo_01.
 
-DATA text TYPE string. "Deklaration
+DATA text TYPE string. "Deklaration"
 
-text = 'Hallo'. "Wertzuweisung
+text = 'Hallo'. "Wertzuweisung"
 
 WRITE: text, 'world'. "Ausgabe

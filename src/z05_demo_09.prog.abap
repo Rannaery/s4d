@@ -10,7 +10,4 @@ TRY.
   CATCH cx_sy_zerodivide into data(e).
   Write / e->get_text( ).
 ENDTRY.
-
-
-
 WRITE result.

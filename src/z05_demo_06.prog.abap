@@ -9,7 +9,3 @@ WHILE sy-index <= 10.
 write / sy-index.
 
 Endwhile.
-
-DO 10 Times.
-Write / sy-index.
-Enddo.

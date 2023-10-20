@@ -33,40 +33,19 @@ ENDIF.
 **********************************************************************
 * Lesen mehrerer Datensätze
 **********************************************************************
-SELECT FROM spfli
-FIELDS *
-WHERE airpfrom = 'FRA'
-INTO TABLE @connections.
-IF sy-subrc <> 0.
-  MESSAGE 'No connection found' TYPE'E'.
-ENDIF.
-
-
-CALL FUNCTION 'Reuse_ALV_GRID_DISPLAY'
-  EXPORTING
-    i_structure_name = 'SPFLI'
-  TABLES
-    t_outtab         = connections.
-
-**********************************************************************
-* Definition der Zielvariablen
-**********************************************************************
-" Angabe einer Zielvariable
-data connection2 type z05_connection.
-
 SELECT from spfli
-fields carrid, connid, cityfrom, cityto
-WHERE carrid = @carrier_id AND connid = @connection_id
-INTO @connection2.
-IF sy-subrc <> 0.
+fields *
+where airpfrom = 'FRA'
+into table @connections.
+if sy-subrc <> 0.
   MESSAGE 'No connection found' TYPE'E'.
-ENDIF.
+  Endif.
 
-"Kopieren namensgleicher Felder
-SELECT Single from spfli
-fields carrid, connid, cityfrom, cityto
-WHERE carrid = @carrier_id AND connid = @connection_id
-INTO CORRESPONDING FIELDS OF @connection.
-IF sy-subrc <> 0.
-  MESSAGE 'No connection found' TYPE'E'.
-ENDIF.
+  cl_salv_table=>factory(
+    EXPORTING
+      list_display   = if_salv_c_bool_sap=>true "Or 'X'
+    IMPORTING
+      r_salv_table   = data(alv)
+    CHANGING
+      t_table        = connections ).
+      alv->display( ).
